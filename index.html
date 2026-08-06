@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Harian Pagi Siwalima — Edisi 24 Juli 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#151210;
+    --ink-2:#211c19;
+    --paper:#f4efe2;
+    --paper-dim:#e8e0ce;
+    --siwalima-red:#b91f28;
+    --siwalima-red-bright:#d62b34;
+    --gold:#c9a24b;
+    --gold-dim:#8a713a;
+    --text-muted:#a89a86;
+    --text-soft:#cfc4b3;
+  }
+
+  *{ box-sizing:border-box; }
+
+  html,body{
+    margin:0;
+    padding:0;
+    min-height:100%;
+    background:
+      radial-gradient(ellipse at 50% -10%, rgba(185,31,40,0.16), transparent 55%),
+      radial-gradient(ellipse at 50% 115%, rgba(201,162,75,0.10), transparent 50%),
+      var(--ink);
+    color:var(--text-soft);
+    font-family:'Inter', sans-serif;
+  }
+
+  .scene{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:32px 16px 90px;
+  }
+
+  /* ---------- Masthead ---------- */
+  .masthead{
+    width:100%;
+    max-width:760px;
+    text-align:center;
+    margin-bottom:28px;
+  }
+
+  .masthead-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-family:'Inter', sans-serif;
+    font-size:11px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--gold);
+    padding:0 4px 10px;
+    border-bottom:1px solid rgba(201,162,75,0.25);
+  }
+
+  .wordmark{
+    margin:18px 0 4px;
+    font-family:'Playfair Display', serif;
+    font-weight:900;
+    font-size:clamp(40px, 9vw, 72px);
+    letter-spacing:0.02em;
+    color:var(--paper);
+    text-shadow: 0 0 30px rgba(185,31,40,0.35);
+    line-height:1;
+  }
+
+  .wordmark span{ color:var(--siwalima-red-bright); }
+
+  .tagline{
+    margin:6px 0 16px;
+    font-family:'Source Serif 4', serif;
+    font-style:italic;
+    font-size:14px;
+    letter-spacing:0.03em;
+    color:var(--text-muted);
+  }
+
+  .rule{
+    height:3px;
+    background: linear-gradient(90deg, transparent, var(--siwalima-red) 15%, var(--gold) 50%, var(--siwalima-red) 85%, transparent);
+    opacity:0.75;
+  }
+
+  /* ---------- Reader ---------- */
+  .reader{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    width:100%;
+    max-width:1000px;
+  }
+
+  .book{
+    filter: drop-shadow(0 25px 45px rgba(0,0,0,0.55));
+  }
+
+  .book :is(canvas, img){
+    background:var(--paper);
+  }
+
+  .nav-arrow{
+    flex:0 0 auto;
+    width:46px;
+    height:46px;
+    border-radius:50%;
+    border:1px solid rgba(201,162,75,0.35);
+    background:rgba(21,18,16,0.6);
+    color:var(--gold);
+    font-size:22px;
+    line-height:1;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+  }
+
+  .nav-arrow:hover{
+    background:var(--siwalima-red);
+    color:var(--paper);
+    border-color:var(--siwalima-red);
+    transform:scale(1.06);
+  }
+
+  .nav-arrow:active{ transform:scale(0.96); }
+
+  .nav-arrow:disabled{
+    opacity:0.25;
+    cursor:default;
+    transform:none;
+    background:rgba(21,18,16,0.6);
+    color:var(--gold);
+  }
+
+  @media (max-width: 640px){
+    .nav-arrow{ display:none; }
+  }
+
+  /* ---------- Footer controls ---------- */
+  .controls{
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:center;
+    gap:18px;
+    padding:14px 20px;
+    background:linear-gradient(0deg, rgba(15,12,10,0.96) 60%, rgba(15,12,10,0.75));
+    border-top:1px solid rgba(201,162,75,0.2);
+    backdrop-filter:blur(6px);
+    z-index:20;
+  }
+
+  .page-indicator{
+    font-family:'Source Serif 4', serif;
+    font-size:14px;
+    color:var(--text-muted);
+    min-width:70px;
+    text-align:center;
+  }
+
+  .page-indicator #curPage{ color:var(--gold); font-weight:600; }
+
+  .btn-group{
+    display:flex;
+    gap:10px;
+  }
+
+  .btn-group button{
+    font-family:'Inter', sans-serif;
+    font-size:13px;
+    font-weight:600;
+    letter-spacing:0.02em;
+    padding:9px 16px;
+    border-radius:999px;
+    border:1px solid rgba(201,162,75,0.3);
+    background:transparent;
+    color:var(--text-soft);
+    cursor:pointer;
+    transition:all 0.2s ease;
+  }
+
+  .btn-group button:hover{
+    border-color:var(--siwalima-red-bright);
+    color:var(--paper);
+    background:rgba(185,31,40,0.25);
+  }
+
+  .btn-group button:disabled{
+    opacity:0.3;
+    cursor:default;
+  }
+
+  .btn-group button:disabled:hover{
+    border-color:rgba(201,162,75,0.3);
+    background:transparent;
+    color:var(--text-soft);
+  }
+
+  .download-link{
+    font-family:'Inter', sans-serif;
+    font-size:13px;
+    font-weight:600;
+    color:var(--gold);
+    text-decoration:none;
+    border-bottom:1px solid transparent;
+    transition:border-color 0.2s ease, color 0.2s ease;
+    white-space:nowrap;
+  }
+
+  .download-link:hover{
+    color:var(--siwalima-red-bright);
+    border-color:currentColor;
+  }
+
+  .hint{
+    width:100%;
+    text-align:center;
+    font-size:11px;
+    letter-spacing:0.05em;
+    color:var(--text-muted);
+    margin-top:14px;
+    opacity:0.7;
+  }
+
+  /* ---------- Loading ---------- */
+  .loading{
+    position:fixed;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:16px;
+    background:var(--ink);
+    z-index:100;
+    transition:opacity 0.4s ease;
+  }
+
+  .loading.hidden{ opacity:0; pointer-events:none; }
+
+  .spinner{
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    border:3px solid rgba(201,162,75,0.2);
+    border-top-color:var(--siwalima-red-bright);
+    animation:spin 0.9s linear infinite;
+  }
+
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  .loading p{
+    font-family:'Source Serif 4', serif;
+    font-style:italic;
+    color:var(--text-muted);
+    font-size:14px;
+    margin:0;
+  }
+
+  /* ---------- Zoom overlay ---------- */
+  .zoom-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(10,8,7,0.92);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:200;
+    padding:40px 16px;
+  }
+
+  .zoom-overlay.hidden{ display:none; }
+
+  .zoom-overlay img{
+    max-width:100%;
+    max-height:100%;
+    box-shadow:0 20px 60px rgba(0,0,0,0.6);
+    border-radius:2px;
+  }
+
+  .close-zoom{
+    position:fixed;
+    top:20px;
+    right:24px;
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    border:1px solid rgba(201,162,75,0.4);
+    background:rgba(21,18,16,0.8);
+    color:var(--paper);
+    font-size:18px;
+    cursor:pointer;
+  }
+
+  .close-zoom:hover{ background:var(--siwalima-red); border-color:var(--siwalima-red); }
+
+  .zoom-nav{
+    position:fixed;
+    top:50%;
+    transform:translateY(-50%);
+    width:48px;
+    height:48px;
+    border-radius:50%;
+    border:1px solid rgba(201,162,75,0.35);
+    background:rgba(21,18,16,0.7);
+    color:var(--gold);
+    font-size:22px;
+    cursor:pointer;
+  }
+
+  .zoom-nav:hover{ background:var(--siwalima-red); color:var(--paper); }
+  .zoom-prev{ left:20px; }
+  .zoom-next{ right:20px; }
+
+  @media (max-width: 640px){
+    .zoom-nav{ display:none; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="scene">
+    <header class="masthead">
+      <div class="masthead-top">
+        <span>Jumat, 24 Juli 2026</span>
+        <span>No. 123 · Tahun XXVII</span>
+      </div>
+      <h1 class="wordmark">SIWA<span>LIMA</span></h1>
+      <p class="tagline">Mengutamakan Persatuan &amp; Persaudaraan</p>
+      <div class="rule"></div>
+    </header>
+
+    <main class="reader">
+      <button class="nav-arrow nav-prev" id="navPrev" aria-label="Halaman sebelumnya">‹</button>
+      <div id="book" class="book"></div>
+      <button class="nav-arrow nav-next" id="navNext" aria-label="Halaman berikutnya">›</button>
+    </main>
+
+    <p class="hint">Klik sudut halaman atau geser untuk membalik &nbsp;•&nbsp; gunakan tombol panah keyboard</p>
+  </div>
+
+  <footer class="controls">
+    <div class="page-indicator"><span id="curPage">1</span> / <span id="totalPages">6</span></div>
+    <div class="btn-group">
+      <button id="btnPrev">‹ Sebelumnya</button>
+      <button id="btnZoom">Perbesar Halaman</button>
+      <button id="btnNext">Berikutnya ›</button>
+    </div>
+    <a class="download-link" href="Koran-Siwalima-2026-07-24.pdf" download>⤓ Unduh PDF Asli</a>
+  </footer>
+
+  <div id="loading" class="loading">
+    <div class="spinner"></div>
+    <p>Memuat edisi Siwalima…</p>
+  </div>
+
+  <div id="zoomOverlay" class="zoom-overlay hidden">
+    <button class="zoom-nav zoom-prev" id="zoomPrev" aria-label="Sebelumnya">‹</button>
+    <img id="zoomImage" src="" alt="Halaman diperbesar">
+    <button class="zoom-nav zoom-next" id="zoomNext" aria-label="Berikutnya">›</button>
+    <button class="close-zoom" id="closeZoom" aria-label="Tutup">✕</button>
+  </div>
+
+  <script src="js/page-flip.browser.js"></script>
+  <script>
+    const pages = [
+      'images/page-1.jpg',
+      'images/page-2.jpg',
+      'images/page-3.jpg',
+      'images/page-4.jpg',
+      'images/page-5.jpg',
+      'images/page-6.jpg'
+    ];
+
+    const bookEl = document.getElementById('book');
+    const loadingEl = document.getElementById('loading');
+    const curPageEl = document.getElementById('curPage');
+    const totalPagesEl = document.getElementById('totalPages');
+    const btnPrev = document.getElementById('btnPrev');
+    const btnNext = document.getElementById('btnNext');
+    const navPrev = document.getElementById('navPrev');
+    const navNext = document.getElementById('navNext');
+    const btnZoom = document.getElementById('btnZoom');
+
+    totalPagesEl.textContent = pages.length;
+
+    function preload(src){
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve();
+        img.onerror = () => resolve();
+        img.src = src;
+      });
+    }
+
+    Promise.all(pages.map(preload)).then(() => {
+      const pageFlip = new St.PageFlip(bookEl, {
+        width: 480,
+        height: 790,
+        size: 'stretch',
+        minWidth: 260,
+        maxWidth: 900,
+        minHeight: 420,
+        maxHeight: 1450,
+        maxShadowOpacity: 0.5,
+        showCover: true,
+        usePortrait: true,
+        mobileScrollSupport: true,
+        useMouseEvents: true,
+        flippingTime: 650
+      });
+
+      pageFlip.loadFromImages(pages);
+
+      function updateUI(idx){
+        curPageEl.textContent = idx + 1;
+        const atStart = idx <= 0;
+        const atEnd = idx >= pages.length - 1;
+        btnPrev.disabled = atStart;
+        navPrev.disabled = atStart;
+        btnNext.disabled = atEnd;
+        navNext.disabled = atEnd;
+      }
+
+      pageFlip.on('init', (e) => {
+        updateUI(e.data.page);
+        loadingEl.classList.add('hidden');
+        setTimeout(() => loadingEl.remove(), 500);
+      });
+
+      pageFlip.on('flip', (e) => updateUI(e.data));
+
+      const goPrev = () => pageFlip.flipPrev();
+      const goNext = () => pageFlip.flipNext();
+
+      btnPrev.addEventListener('click', goPrev);
+      btnNext.addEventListener('click', goNext);
+      navPrev.addEventListener('click', goPrev);
+      navNext.addEventListener('click', goNext);
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') goPrev();
+        if (e.key === 'ArrowRight') goNext();
+        if (e.key === 'Escape') closeZoom();
+      });
+
+      // ---- Zoom overlay ----
+      const zoomOverlay = document.getElementById('zoomOverlay');
+      const zoomImage = document.getElementById('zoomImage');
+      const closeZoomBtn = document.getElementById('closeZoom');
+      const zoomPrevBtn = document.getElementById('zoomPrev');
+      const zoomNextBtn = document.getElementById('zoomNext');
+      let zoomIndex = 0;
+
+      function openZoom(){
+        zoomIndex = pageFlip.getCurrentPageIndex();
+        renderZoom();
+        zoomOverlay.classList.remove('hidden');
+      }
+
+      function renderZoom(){
+        zoomImage.src = pages[zoomIndex];
+        zoomPrevBtn.style.visibility = zoomIndex <= 0 ? 'hidden' : 'visible';
+        zoomNextBtn.style.visibility = zoomIndex >= pages.length - 1 ? 'hidden' : 'visible';
+      }
+
+      function closeZoom(){
+        zoomOverlay.classList.add('hidden');
+      }
+
+      btnZoom.addEventListener('click', openZoom);
+      closeZoomBtn.addEventListener('click', closeZoom);
+      zoomOverlay.addEventListener('click', (e) => {
+        if (e.target === zoomOverlay) closeZoom();
+      });
+      zoomPrevBtn.addEventListener('click', () => { if (zoomIndex > 0){ zoomIndex--; renderZoom(); } });
+      zoomNextBtn.addEventListener('click', () => { if (zoomIndex < pages.length - 1){ zoomIndex++; renderZoom(); } });
+    });
+  </script>
+</body>
+</html>
